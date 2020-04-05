@@ -9,7 +9,7 @@ defmodule YubikeyOtp.Controller do
     prepare_api_tasks(request, service.urls)
     |> make_concurrent_api_calls()
     |> sort_responses()
-    |> handle_halted()
+    #|> handle_halted()
     |> filter_responses()
     |> select_primary_response()
     |> verify_response()
@@ -46,16 +46,12 @@ defmodule YubikeyOtp.Controller do
     |> Enum.filter(fn r -> !is_nil(r) end)
   end
 
-  def handle_halted(responses) do
-    responses
-    |> Enum.filter(fn r -> r.halted == true end)
-    |> Enum.each(fn r -> IO.puts "ERROR! #{r.status}" end)
-    responses
-  end
-
-  def handle_error(response) do
-
-  end
+#  def handle_halted(responses) do
+#    responses
+#    |> Enum.filter(fn r -> r.halted == true end)
+#    |> Enum.each(fn r -> IO.puts "ERROR! #{r.status}" end)
+#    responses
+#  end
 
   def select_primary_response(responses) do
     case Enum.find(responses, fn r -> r.status == :ok end) do
