@@ -26,10 +26,11 @@ defmodule YubikeyOtp.Controller do
            case result do
              nil ->
                Task.shutdown(task, :brutal_kill)
+               task_failure_response(:sys_timeout, "Task shutdown")
              {:exit, reason} ->
-               IO.puts reason
-             {:ok, result} ->
-               result
+               task_failure_response(:sys_exit, reason)
+             {:ok, response} ->
+               response
            end
          end
        )
@@ -42,7 +43,7 @@ defmodule YubikeyOtp.Controller do
 
   def filter_responses(responses) do
     responses
-    |> Enum.filter(fn r -> ! is_nil(r) end)
+    |> Enum.filter(fn r -> !is_nil(r) end)
   end
 
   def handle_halted(responses) do
@@ -68,6 +69,18 @@ defmodule YubikeyOtp.Controller do
       response.status == :ok -> {:ok, response.status}
       true -> {:error, response.status}
     end
+  end
+
+  def task_failure_response(code, message) do
+    Response.new(
+      halted: true,
+      otp: "error",
+      nonce: "error",
+      hmac: nil,
+      timestamp: DateTime.utc_now
+                 |> DateTime.to_string(),
+      status: code
+    )
   end
 
 end
