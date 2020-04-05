@@ -3,13 +3,12 @@ defmodule YubikeyOtp.Request do
   alias __MODULE__
   alias YubikeyOtp.Nonce
 
-  @enforce_keys [:id, :otp, :nonce]
+  @enforce_keys [:id, :otp]
 
   defstruct [
     :id,
     :otp,
     :timestamp,
-    :nonce,
     :sl,
     :timeout,
   ]
@@ -18,8 +17,7 @@ defmodule YubikeyOtp.Request do
 
     request = %Request{
       id: service.api_id,
-      otp: otp,
-      nonce: Nonce.generate()
+      otp: otp
     }
     {:ok, request}
 
