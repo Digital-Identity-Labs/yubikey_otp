@@ -15,7 +15,7 @@ defmodule YubikeyOtp.Otp do
     if String.valid?(otp) and String.length(otp) >= 32 and String.length(otp) <= 48 do
       {:ok, otp}
     else
-      {:error, "Invalid OTP string #{otp}"}
+      {:error, :otp_invalid}
     end
 
   end

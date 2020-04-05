@@ -3,7 +3,7 @@ defmodule YubikeyOtp.Response do
   alias __MODULE__
   alias YubikeyOtp.Signature
 
-  @enforce_keys [:otp, :status]
+  @enforce_keys [:otp, :status, :type]
 
   defstruct [
     :otp,
@@ -14,6 +14,7 @@ defmodule YubikeyOtp.Response do
     :sessioncounter,
     :sessionuse,
     :sl,
+    halted: false
   ]
 
   def new(options \\ %{}) do
@@ -22,10 +23,6 @@ defmodule YubikeyOtp.Response do
 
   def validate(response) do
     {:ok, response}
-  end
-
-  def error(response) do
-    {:error, "FIXME"}
   end
 
 end

@@ -26,13 +26,14 @@ defmodule YubikeyOtp.Http do
     try do
       case get(endpoint, query: request_to_query(request)) do
         {:ok, %Tesla.Env{status: 200, body: body} = http_response} -> process_api_response(body)
+        {:error, :econnrefused} -> process_error(endpoint, :http_cannot_connect)
         {:ok, http_response} -> parse_tesla_failed(endpoint, http_response)
-        {:error, message} -> {:error, message}
+        {:error, message} -> process_error(endpoint, :http_unknown, message)
         _ ->
-          {:error, "An unknown HTTP API error occurred"}
+          process_error(endpoint, :http_unknown)
       end
     rescue
-      e in RuntimeError -> {:error, "Could not connect to #{endpoint} API: #{e}"}
+      e in RuntimeError -> process_error(endpoint, :http_cannot_connect, "Could not connect to #{endpoint} API: #{e}")
     end
   end
 
@@ -53,13 +54,21 @@ defmodule YubikeyOtp.Http do
   end
 
   def parse_tesla_failed(endpoint, http_response) do
-    {:error, "Could not connect to #{endpoint} API: #{http_response.status}"}
+    case http_response.status do
+      "404" -> process_error(endpoint, :http_404)
+      "500" -> process_error(endpoint, :http_500)
+      _ -> process_error(endpoint, :http_unknown)
+    end
   end
 
   def process_api_response(body) do
     body
     |> parse_response_params()
     |> params_to_response()
+  end
+
+  def process_error(endpoint, code, message \\ "") do
+    error_to_response(endpoint, code, message)
   end
 
   def parse_response_params(body) do
@@ -74,6 +83,7 @@ defmodule YubikeyOtp.Http do
   def params_to_response(params) do
 
     Response.new(
+      halted: false,
       otp: params["otp"],
       nonce: params["nonce"],
       hmac: params["h"],
@@ -83,6 +93,18 @@ defmodule YubikeyOtp.Http do
               |> String.to_atom
     )
 
+  end
+
+  def error_to_response(endpoint, code, message \\ nil) do
+    Response.new(
+      halted: true,
+      otp: "error",
+      nonce: "error",
+      hmac: nil,
+      timestamp: DateTime.utc_now
+                 |> DateTime.to_string(),
+      status: code
+    )
   end
 
 end

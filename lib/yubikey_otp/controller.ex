@@ -6,28 +6,28 @@ defmodule YubikeyOtp.Controller do
   alias YubikeyOtp.Response
 
   def verify(request, service) do
-
-    http_request_tasks = Enum.map(service.urls, fn (url) -> Task.async(fn -> Http.verify(request, url) end) end)
-
-    response = parallel_api_calls(http_request_tasks)
-               |> sort_responses()
-               |> filter_responses()
-               |> select_primary_response()
-
-    verify_response(response)
-
+    prepare_api_tasks(request, service.urls)
+    |> make_concurrent_api_calls()
+    |> sort_responses()
+    |> handle_halted()
+    |> filter_responses()
+    |> select_primary_response()
+    |> verify_response()
   end
 
-  def parallel_api_calls(tasks) do
-    Task.yield_many(tasks)
+  def prepare_api_tasks(request, urls) do
+    Enum.map(urls, fn (url) -> Task.async(fn -> Http.verify(request, url) end) end)
+  end
+
+  def make_concurrent_api_calls(tasks) do
+    Task.yield_many(tasks, 3000)
     |> Enum.map(
          fn {task, result} ->
            case result do
              nil ->
                Task.shutdown(task, :brutal_kill)
-               exit(:timeout)
              {:exit, reason} ->
-               exit(reason)
+               IO.puts reason
              {:ok, result} ->
                result
            end
@@ -42,6 +42,18 @@ defmodule YubikeyOtp.Controller do
 
   def filter_responses(responses) do
     responses
+    |> Enum.filter(fn r -> ! is_nil(r) end)
+  end
+
+  def handle_halted(responses) do
+    responses
+    |> Enum.filter(fn r -> r.halted == true end)
+    |> Enum.each(fn r -> IO.puts "ERROR! #{r.status}" end)
+    responses
+  end
+
+  def handle_error(response) do
+
   end
 
   def select_primary_response(responses) do
