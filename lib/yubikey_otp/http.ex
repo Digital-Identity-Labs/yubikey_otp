@@ -27,7 +27,7 @@ defmodule YubikeyOtp.Http do
       case get(endpoint, query: request_to_query(request)) do
         {:ok, %Tesla.Env{status: 200, body: body} = http_response} -> process_api_response(body)
         {:error, :econnrefused} -> process_error(endpoint, :http_cannot_connect)
-        {:ok, http_response} -> parse_tesla_failed(endpoint, http_response)
+        {:ok, http_response} -> parse_http_status(endpoint, http_response)
         {:error, message} -> process_error(endpoint, :http_unknown, message)
         _ ->
           process_error(endpoint, :http_unknown)
@@ -49,11 +49,11 @@ defmodule YubikeyOtp.Http do
     |> filter_nils()
   end
 
-  def filter_nils(map) do
+  defp filter_nils(map) do
     Enum.filter(map, fn {k, v} -> !is_nil(v) end)
   end
 
-  def parse_tesla_failed(endpoint, http_response) do
+  defp parse_http_status(endpoint, http_response) do
     case http_response.status do
       "404" -> process_error(endpoint, :http_404)
       "500" -> process_error(endpoint, :http_500)
@@ -61,17 +61,17 @@ defmodule YubikeyOtp.Http do
     end
   end
 
-  def process_api_response(body) do
+  defp process_api_response(body) do
     body
     |> parse_response_params()
     |> params_to_response()
   end
 
-  def process_error(endpoint, code, message \\ "") do
+  defp process_error(endpoint, code, message \\ "") do
     error_to_response(endpoint, code, message)
   end
 
-  def parse_response_params(body) do
+  defp parse_response_params(body) do
     body
     |> String.strip()
     |> String.split()
@@ -80,7 +80,7 @@ defmodule YubikeyOtp.Http do
     |> Enum.into(%{})
   end
 
-  def params_to_response(params) do
+  defp params_to_response(params) do
 
     Response.new(
       halted: false,
@@ -95,7 +95,7 @@ defmodule YubikeyOtp.Http do
 
   end
 
-  def error_to_response(endpoint, code, message \\ nil) do
+  defp error_to_response(endpoint, code, message \\ nil) do
     Response.new(
       halted: true,
       otp: "error",
