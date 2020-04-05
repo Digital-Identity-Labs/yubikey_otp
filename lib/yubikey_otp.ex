@@ -38,7 +38,12 @@ defmodule YubikeyOtp do
 
   end
 
-
+  def verify?(otp, service) do
+    case verify(otp, service) do
+      {:ok, _} -> true
+      _ -> false
+    end
+  end
 
 
 

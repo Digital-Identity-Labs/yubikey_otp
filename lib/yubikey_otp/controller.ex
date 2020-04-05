@@ -2,15 +2,19 @@ defmodule YubikeyOtp.Controller do
 
   alias __MODULE__
   alias YubikeyOtp.Http
+  alias YubikeyOtp.Request
+  alias YubikeyOtp.Response
 
   def verify(request, service) do
 
     http_request_tasks = Enum.map(service.urls, fn (url) -> Task.async(fn -> Http.verify(request, url) end) end)
 
-    parallel_api_calls(http_request_tasks)
-#    |> Enum.map(fn http_response -> parse_http_response(http_response) end)
+    response = parallel_api_calls(http_request_tasks)
+               |> sort_responses()
+               |> filter_responses()
+               |> select_primary_response()
 
-    {:ok, "X"}
+    verify_response(response)
 
   end
 
@@ -31,5 +35,27 @@ defmodule YubikeyOtp.Controller do
        )
   end
 
+  def sort_responses(responses) do
+    responses
+    |> Enum.sort_by(&(&1.timestamp))
+  end
+
+  def filter_responses(responses) do
+    responses
+  end
+
+  def select_primary_response(responses) do
+    case Enum.find(responses, fn r -> r.status == :ok end) do
+      %Response{} = response -> response
+      _ -> List.first(responses)
+    end
+  end
+
+  def verify_response(response) do
+    cond do
+      response.status == :ok -> {:ok, response.status}
+      true -> {:error, response.status}
+    end
+  end
 
 end

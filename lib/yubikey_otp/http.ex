@@ -23,9 +23,17 @@ defmodule YubikeyOtp.Http do
        end
 
   def verify(request, endpoint) do
-    get(endpoint, query: request_to_query(request))
-    |> parse_http_response()
-
+    try do
+      case get(endpoint, query: request_to_query(request)) do
+        {:ok, %Tesla.Env{status: 200, body: body} = http_response} -> process_api_response(body)
+        {:ok, http_response} -> parse_tesla_failed(endpoint, http_response)
+        {:error, message} -> {:error, message}
+        _ ->
+          {:error, "An unknown HTTP API error occurred"}
+      end
+    rescue
+      e in RuntimeError -> {:error, "Could not connect to #{endpoint} API: #{e}"}
+    end
   end
 
   defp request_to_query(request) do
@@ -34,7 +42,7 @@ defmodule YubikeyOtp.Http do
       otp: request.otp,
       h: nil,
       timestamp: request.timestamp,
-      nonce:  Nonce.generate(),
+      nonce: Nonce.generate(),
       timeout: 1
     }
     |> filter_nils()
@@ -44,11 +52,37 @@ defmodule YubikeyOtp.Http do
     Enum.filter(map, fn {k, v} -> !is_nil(v) end)
   end
 
+  def parse_tesla_failed(endpoint, http_response) do
+    {:error, "Could not connect to #{endpoint} API: #{http_response.status}"}
+  end
 
-  def parse_http_response({:ok, %Elixir.Tesla.Env{status: 200}} = http_response) do
+  def process_api_response(body) do
+    body
+    |> parse_response_params()
+    |> params_to_response()
+  end
 
-    Apex.ap http_response
-    #    %Response {}
+  def parse_response_params(body) do
+    body
+    |> String.strip()
+    |> String.split()
+    |> Enum.map(fn line -> String.split(line, "=", parts: 2) end)
+    |> Enum.map(fn [k, v] -> {k, v} end)
+    |> Enum.into(%{})
+  end
+
+  def params_to_response(params) do
+
+    Response.new(
+      otp: params["otp"],
+      nonce: params["nonce"],
+      hmac: params["h"],
+      timestamp: params["t"],
+      status: params["status"]
+              |> String.downcase()
+              |> String.to_atom
+    )
+
   end
 
 end

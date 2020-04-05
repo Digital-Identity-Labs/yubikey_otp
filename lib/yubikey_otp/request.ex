@@ -7,6 +7,7 @@ defmodule YubikeyOtp.Request do
 
   defstruct [
     :id,
+    :secret,
     :otp,
     :timestamp,
     :sl,
@@ -17,6 +18,7 @@ defmodule YubikeyOtp.Request do
 
     request = %Request{
       id: service.api_id,
+      secret: service.api_key,
       otp: otp
     }
     {:ok, request}

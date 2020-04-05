@@ -16,8 +16,16 @@ defmodule YubikeyOtp.Response do
     :sl,
   ]
 
+  def new(options \\ %{}) do
+    struct(Response, options)
+  end
+
   def validate(response) do
     {:ok, response}
+  end
+
+  def error(response) do
+    {:error, "FIXME"}
   end
 
 end
