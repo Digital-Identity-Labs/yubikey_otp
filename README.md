@@ -39,7 +39,7 @@ the API result. It follows Yubico's recommendation to send queries to five diffe
 ```elixir
 
     my_id = Application.get_env(:my_app, :yubikey_client_id)
-    
+
     {:ok, service} = YubikeyOtp.service(api_id: my_id)
 
     YubikeyOtp.verify("ccccccclzlojikekndkhfibggvkgujttihkcuvkjfrvj", service)

@@ -12,15 +12,15 @@ defmodule YubikeyOtp.Http do
   plug Tesla.Middleware.FollowRedirects, max_redirects: 1
   #plug Tesla.Middleware.Logger
   plug Tesla.Middleware.KeepRequest
-  plug Tesla.Middleware.Retry,
-       delay: 100,
-       max_retries: 1,
-       max_delay: 2_000,
-       should_retry: fn
-         {:ok, %{status: status}} when status in [400, 500] -> true
-         {:ok, _} -> false
-         {:error, _} -> true
-       end
+#  plug Tesla.Middleware.Retry,
+#       delay: 100,
+#       max_retries: 1,
+#       max_delay: 2_000,
+#       should_retry: fn
+#         {:ok, %{status: status}} when status in [400, 500] -> true
+#         {:ok, _} -> false
+#         {:error, _} -> true
+#       end
 
   def verify(request, endpoint) do
     try do

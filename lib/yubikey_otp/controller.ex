@@ -20,7 +20,7 @@ defmodule YubikeyOtp.Controller do
   end
 
   def make_concurrent_api_calls(tasks) do
-    Task.yield_many(tasks, 3000)
+    Task.yield_many(tasks, 4000)
     |> Enum.map(
          fn {task, result} ->
            case result do
