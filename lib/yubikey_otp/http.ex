@@ -29,8 +29,6 @@ defmodule YubikeyOtp.Http do
         {:error, :econnrefused} -> process_error(endpoint, :http_cannot_connect)
         {:ok, http_response} -> parse_http_status(endpoint, http_response)
         {:error, message} -> process_error(endpoint, :http_unknown, message)
-        _ ->
-          process_error(endpoint, :http_unknown)
       end
     rescue
       e in RuntimeError -> process_error(endpoint, :http_cannot_connect, "Could not connect to #{endpoint} API: #{e}")
@@ -55,8 +53,8 @@ defmodule YubikeyOtp.Http do
 
   defp parse_http_status(endpoint, http_response) do
     case http_response.status do
-      "404" -> process_error(endpoint, :http_404)
-      "500" -> process_error(endpoint, :http_500)
+      404 -> process_error(endpoint, :http_404)
+      500 -> process_error(endpoint, :http_500)
       _ -> process_error(endpoint, :http_unknown)
     end
   end
