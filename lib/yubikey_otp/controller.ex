@@ -9,8 +9,6 @@ defmodule YubikeyOtp.Controller do
     prepare_api_tasks(request, service.urls)
     |> make_concurrent_api_calls()
     |> sort_responses()
-    #|> handle_halted()
-    |> filter_responses()
     |> select_primary_response()
     |> verify_response()
   end
@@ -30,28 +28,27 @@ defmodule YubikeyOtp.Controller do
              {:exit, reason} ->
                task_failure_response(:sys_exit, reason)
              {:ok, response} ->
-               response
+               if response.status == :ok do
+                 immediately_kill_other_tasks(task, tasks)
+                 response
+               else
+                 response
+               end
            end
          end
        )
   end
 
+  def immediately_kill_other_tasks(this_task, all_tasks) do
+    all_tasks
+    |> Enum.each(fn task -> Task.shutdown(task, :brutal_kill) end)
+  end
+
   def sort_responses(responses) do
     responses
+    |> Enum.filter(fn r -> !is_nil(r) end)
     |> Enum.sort_by(&(&1.timestamp))
   end
-
-  def filter_responses(responses) do
-    responses
-    |> Enum.filter(fn r -> !is_nil(r) end)
-  end
-
-#  def handle_halted(responses) do
-#    responses
-#    |> Enum.filter(fn r -> r.halted == true end)
-#    |> Enum.each(fn r -> IO.puts "ERROR! #{r.status}" end)
-#    responses
-#  end
 
   def select_primary_response(responses) do
     case Enum.find(responses, fn r -> r.status == :ok end) do
