@@ -67,7 +67,14 @@ YubikeyOTP is MIT licensed.
 
 ## References
 
- * https://en.wikipedia.org/wiki/YubiKey
+ * [Wikipedia - Yubikey](https://en.wikipedia.org/wiki/YubiKey)
+ * [Yubico - Using A Client Library](https://developers.yubico.com/OTP/Libraries/Using_a_library.html)
+ * [Yubico - Getting Started Writing Clients](https://developers.yubico.com/yubikey-val/Getting_Started_Writing_Clients.html)
+ * [Yubico - Validation Protocol V2](https://developers.yubico.com/yubikey-val/Validation_Protocol_V2.0.html)
+ * [Yubico - Yubicloud Connector Libraries](https://developers.yubico.com/OTP/Libraries/List_of_libraries.html)
+ * [Yubico - Self Hosted OTP Validation](https://developers.yubico.com/OTP/Guides/Self-hosted_OTP_validation.html)
+
+
 
 ## Disclaimer
 YubikeyOTP is not endorsed by Yubico.
