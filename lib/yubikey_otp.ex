@@ -6,21 +6,22 @@ defmodule YubikeyOtp do
   alias YubikeyOtp.Response
   alias YubikeyOtp.Controller
 
-
+  @spec service(options :: map) :: {:ok, %Service{}}
   def service(options) do
     Service.new(options)
     |> Service.validate()
   end
 
+  @spec device_id(otp :: binary) :: {:ok, binary} | {:error, :otp_invalid}
   def device_id(otp) do
-
     with {:ok, otp} <- Otp.validate(otp) do
-      Otp.device_id(otp)
+      {:ok, Otp.device_id(otp)}
     else
       err -> err
     end
   end
 
+  @spec verify(otp :: binary, service :: %Service{} ) :: {:ok, :ok} | {:error, atom}
   def verify(otp, service) do
 
     with {:ok, otp} <- Otp.validate(otp),
@@ -38,13 +39,12 @@ defmodule YubikeyOtp do
 
   end
 
+  @spec verify?(otp :: binary, service :: %Service{} ) :: true | false
   def verify?(otp, service) do
     case verify(otp, service) do
       {:ok, _} -> true
       _ -> false
     end
   end
-
-
 
 end
