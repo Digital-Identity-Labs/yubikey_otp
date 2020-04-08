@@ -1,0 +1,3 @@
+defmodule APIResponses do
+
+end
