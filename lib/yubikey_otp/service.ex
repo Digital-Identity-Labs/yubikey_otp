@@ -1,5 +1,7 @@
 defmodule YubikeyOtp.Service do
 
+  @moduledoc false
+
   alias __MODULE__
 
   @yubico_endpoints [

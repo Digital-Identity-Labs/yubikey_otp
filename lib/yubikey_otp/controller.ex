@@ -1,5 +1,7 @@
 defmodule YubikeyOtp.Controller do
 
+  @moduledoc false
+
   alias __MODULE__
   alias YubikeyOtp.Http
   alias YubikeyOtp.Request

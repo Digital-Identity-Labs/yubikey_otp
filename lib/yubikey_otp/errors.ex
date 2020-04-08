@@ -1,5 +1,10 @@
 defmodule YubikeyOtp.Errors do
 
+  @moduledoc """
+    This module should contain all the errors that can be returned by Yubikey OTP, with descriptions.
+
+  """
+
   @errors %{
     ok: "The OTP is valid",
     bad_otp: "The OTP is invalid format",

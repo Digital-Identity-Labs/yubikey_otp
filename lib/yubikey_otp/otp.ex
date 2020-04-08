@@ -1,5 +1,7 @@
 defmodule YubikeyOtp.Otp do
 
+  @moduledoc false
+
   alias __MODULE__
 
   def device_id(otp) do

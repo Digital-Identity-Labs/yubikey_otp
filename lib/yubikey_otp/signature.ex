@@ -1,5 +1,7 @@
 defmodule YubikeyOtp.Signature do
 
+  @moduledoc false
+
   alias __MODULE__
 
   def request_hmac(query_string, key) do
