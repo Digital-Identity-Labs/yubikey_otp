@@ -4,15 +4,16 @@ defmodule YubikeyOtp do
       This module contains all the functions you'll need to authenticate Yubikey OTPs.
   """
 
+  alias YubikeyOtp.Controller
   alias YubikeyOtp.Otp
-  alias YubikeyOtp.Service
   alias YubikeyOtp.Request
   alias YubikeyOtp.Response
-  alias YubikeyOtp.Controller
+  alias YubikeyOtp.Service
 
   @spec service(options :: map) :: {:ok, %Service{}}
   def service(options) do
-    Service.new(options)
+    options
+    |> Service.new()
     |> Service.validate()
   end
 

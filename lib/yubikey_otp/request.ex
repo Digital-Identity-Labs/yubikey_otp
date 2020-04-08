@@ -31,5 +31,4 @@ defmodule YubikeyOtp.Request do
     {:ok, request}
   end
 
-
 end

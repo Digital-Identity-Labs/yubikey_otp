@@ -23,7 +23,7 @@ defmodule YubikeyOtp.Errors do
     otp_invalid: "The supplied OTP is invalid",
   }
 
-  def list() do
+  def list do
     Map.keys(@errors)
   end
 

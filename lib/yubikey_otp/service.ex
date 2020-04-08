@@ -32,5 +32,3 @@ defmodule YubikeyOtp.Service do
   end
 
 end
-
-

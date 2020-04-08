@@ -3,10 +3,11 @@ defmodule YubikeyOtp.Http do
   @moduledoc false
 
   alias __MODULE__
-  alias YubikeyOtp.Signature
+
+  alias YubikeyOtp.Nonce
   alias YubikeyOtp.Request
   alias YubikeyOtp.Response
-  alias YubikeyOtp.Nonce
+  alias YubikeyOtp.Signature
 
   use Tesla
 
@@ -14,27 +15,27 @@ defmodule YubikeyOtp.Http do
   plug Tesla.Middleware.FollowRedirects, max_redirects: 1
   #plug Tesla.Middleware.Logger
   plug Tesla.Middleware.KeepRequest
-#  plug Tesla.Middleware.Retry,
-#       delay: 100,
-#       max_retries: 1,
-#       max_delay: 2_000,
-#       should_retry: fn
-#         {:ok, %{status: status}} when status in [400, 500] -> true
-#         {:ok, _} -> false
-#         {:error, _} -> true
-#       end
+  #  plug Tesla.Middleware.Retry,
+  #       delay: 100,
+  #       max_retries: 1,
+  #       max_delay: 2_000,
+  #       should_retry: fn
+  #         {:ok, %{status: status}} when status in [400, 500] -> true
+  #         {:ok, _} -> false
+  #         {:error, _} -> true
+  #       end
 
   def verify(request, endpoint) do
-    try do
-      case get(endpoint, query: request_to_query(request)) do
-        {:ok, %Tesla.Env{status: 200, body: body} = http_response} -> process_api_response(body)
-        {:error, :econnrefused} -> process_error(endpoint, :http_cannot_connect)
-        {:ok, http_response} -> parse_http_status(endpoint, http_response)
-        {:error, message} -> process_error(endpoint, :http_unknown, message)
-      end
-    rescue
-      e in RuntimeError -> process_error(endpoint, :http_cannot_connect, "Could not connect to #{endpoint} API: #{e}")
+
+    case get(endpoint, query: request_to_query(request)) do
+      {:ok, %Tesla.Env{status: 200, body: body} = http_response} -> process_api_response(body)
+      {:error, :econnrefused} -> process_error(endpoint, :http_cannot_connect)
+      {:ok, http_response} -> parse_http_status(endpoint, http_response)
+      {:error, message} -> process_error(endpoint, :http_unknown, message)
     end
+
+  rescue
+    e in RuntimeError -> process_error(endpoint, :http_cannot_connect, "Could not connect to #{endpoint} API: #{e}")
   end
 
   defp request_to_query(request) do
@@ -75,9 +76,8 @@ defmodule YubikeyOtp.Http do
     body
     |> String.strip()
     |> String.split()
-    |> Enum.map(fn line -> String.split(line, "=", parts: 2) end)
-    |> Enum.map(fn [k, v] -> {k, v} end)
-    |> Enum.into(%{})
+    |> Enum.map(fn line -> String.split(line, "=", parts: 2) end) # credo:disable-for-next-line
+    |> Enum.into(%{}, fn [k, v] -> {k, v} end)
   end
 
   defp params_to_response(params) do

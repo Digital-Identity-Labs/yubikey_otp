@@ -2,13 +2,16 @@ defmodule YubikeyOtp.Controller do
 
   @moduledoc false
 
+  @timeout 4000
+
   alias __MODULE__
   alias YubikeyOtp.Http
   alias YubikeyOtp.Request
   alias YubikeyOtp.Response
 
   def verify(request, service) do
-    prepare_api_tasks(request, service.urls)
+    request
+    |> prepare_api_tasks(service.urls)
     |> make_concurrent_api_calls()
     |> sort_responses()
     |> select_primary_response()
@@ -20,7 +23,8 @@ defmodule YubikeyOtp.Controller do
   end
 
   def make_concurrent_api_calls(tasks) do
-    Task.yield_many(tasks, 4000)
+    tasks
+    |> Task.yield_many(@timeout)
     |> Enum.map(
          fn {task, result} ->
            case result do
@@ -30,15 +34,17 @@ defmodule YubikeyOtp.Controller do
              {:exit, reason} ->
                task_failure_response(:sys_exit, reason)
              {:ok, response} ->
-               if response.status == :ok do
-                 immediately_kill_other_tasks(task, tasks)
-                 response
-               else
-                 response
-               end
+               task_success_and_completion(response, task, tasks)
            end
          end
        )
+  end
+
+  def task_success_and_completion(response, task, tasks) do
+    if response.status == :ok do
+      immediately_kill_other_tasks(task, tasks)
+    end
+    response
   end
 
   def immediately_kill_other_tasks(this_task, all_tasks) do
@@ -60,9 +66,10 @@ defmodule YubikeyOtp.Controller do
   end
 
   def verify_response(response) do
-    cond do
-      response.status == :ok -> {:ok, response.status}
-      true -> {:error, response.status}
+    if response.status == :ok do
+      {:ok, response.status}
+    else
+      {:error, response.status}
     end
   end
 
