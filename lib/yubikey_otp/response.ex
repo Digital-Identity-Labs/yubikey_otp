@@ -3,7 +3,6 @@ defmodule YubikeyOtp.Response do
   @moduledoc false
 
   alias __MODULE__
-  alias YubikeyOtp.Signature
 
   @enforce_keys [:otp, :status, :type]
 

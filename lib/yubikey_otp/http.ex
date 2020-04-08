@@ -15,15 +15,7 @@ defmodule YubikeyOtp.Http do
   plug Tesla.Middleware.FollowRedirects, max_redirects: 1
   #plug Tesla.Middleware.Logger
   plug Tesla.Middleware.KeepRequest
-  #  plug Tesla.Middleware.Retry,
-  #       delay: 100,
-  #       max_retries: 1,
-  #       max_delay: 2_000,
-  #       should_retry: fn
-  #         {:ok, %{status: status}} when status in [400, 500] -> true
-  #         {:ok, _} -> false
-  #         {:error, _} -> true
-  #       end
+
 
   def verify(request, endpoint) do
 
@@ -74,7 +66,7 @@ defmodule YubikeyOtp.Http do
 
   defp parse_response_params(body) do
     body
-    |> String.strip()
+    |> String.trim()
     |> String.split()
     |> Enum.map(fn line -> String.split(line, "=", parts: 2) end) # credo:disable-for-next-line
     |> Enum.into(%{}, fn [k, v] -> {k, v} end)
@@ -95,7 +87,7 @@ defmodule YubikeyOtp.Http do
 
   end
 
-  defp error_to_response(endpoint, code, message \\ nil) do
+  defp error_to_response(endpoint, code, message) do
     Response.new(
       halted: true,
       otp: "error",

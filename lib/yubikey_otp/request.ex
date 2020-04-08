@@ -3,7 +3,6 @@ defmodule YubikeyOtp.Request do
   @moduledoc false
 
   alias __MODULE__
-  alias YubikeyOtp.Nonce
 
   @enforce_keys [:id, :otp]
 

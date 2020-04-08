@@ -4,9 +4,7 @@ defmodule YubikeyOtp.Controller do
 
   @timeout 4000
 
-  alias __MODULE__
   alias YubikeyOtp.Http
-  alias YubikeyOtp.Request
   alias YubikeyOtp.Response
 
   def verify(request, service) do
@@ -47,7 +45,7 @@ defmodule YubikeyOtp.Controller do
     response
   end
 
-  def immediately_kill_other_tasks(this_task, all_tasks) do
+  def immediately_kill_other_tasks(_this_task, all_tasks) do
     all_tasks
     |> Enum.each(fn task -> Task.shutdown(task, :brutal_kill) end)
   end
@@ -73,7 +71,7 @@ defmodule YubikeyOtp.Controller do
     end
   end
 
-  def task_failure_response(code, message) do
+  def task_failure_response(code, _message) do
     Response.new(
       halted: true,
       otp: "error",
