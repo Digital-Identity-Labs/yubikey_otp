@@ -1,5 +1,4 @@
 defmodule YubikeyOTP.Request do
-
   @moduledoc false
 
   alias __MODULE__
@@ -12,22 +11,20 @@ defmodule YubikeyOTP.Request do
     :otp,
     :timestamp,
     :sl,
-    :timeout,
+    :timeout
   ]
 
   def new(otp, service) do
-
     request = %Request{
       id: service.api_id,
       secret: service.api_key,
       otp: otp
     }
-    {:ok, request}
 
+    {:ok, request}
   end
 
   def validate(request) do
     {:ok, request}
   end
-
 end

@@ -1,5 +1,4 @@
 defmodule YubikeyOTP.HTTP do
-
   @moduledoc false
 
   @agent_version "0.1.0"
@@ -11,23 +10,29 @@ defmodule YubikeyOTP.HTTP do
 
   use Tesla
 
-  plug Tesla.Middleware.BaseUrl, "https://api.yubico.com/wsapi/2.0/verify"
-  plug Tesla.Middleware.FollowRedirects, max_redirects: 1
-  plug Tesla.Middleware.Headers, [{"user-agent", "YubikeyOTP +https://github.com/Digital-Identity-Labs/yubikey_otp YubikeyOTP/#{@agent_version}"}]
-  plug Tesla.Middleware.Logger
-  plug Tesla.Middleware.KeepRequest
+  plug(Tesla.Middleware.BaseUrl, "https://api.yubico.com/wsapi/2.0/verify")
+  plug(Tesla.Middleware.FollowRedirects, max_redirects: 1)
+
+  plug(Tesla.Middleware.Headers, [
+    {"user-agent",
+     "YubikeyOTP +https://github.com/Digital-Identity-Labs/yubikey_otp YubikeyOTP/#{
+       @agent_version
+     }"}
+  ])
+
+  plug(Tesla.Middleware.Logger)
+  plug(Tesla.Middleware.KeepRequest)
 
   def verify(request, endpoint) do
-
     case get(endpoint, query: request_to_query(request)) do
       {:ok, %Tesla.Env{status: 200, body: body}} -> process_api_response(endpoint, body)
       {:error, :econnrefused} -> process_error(endpoint, :http_cannot_connect)
       {:ok, http_response} -> parse_http_status(endpoint, http_response)
       {:error, message} -> process_error(endpoint, :http_unknown, message)
     end
-
   rescue
-    e in RuntimeError -> process_error(endpoint, :http_cannot_connect, "Could not connect to #{endpoint} API: #{e}")
+    e in RuntimeError ->
+      process_error(endpoint, :http_cannot_connect, "Could not connect to #{endpoint} API: #{e}")
   end
 
   defp request_to_query(request) do
@@ -68,12 +73,12 @@ defmodule YubikeyOTP.HTTP do
     body
     |> String.trim()
     |> String.split()
-    |> Enum.map(fn line -> String.split(line, "=", parts: 2) end) # credo:disable-for-next-line
+    # credo:disable-for-next-line
+    |> Enum.map(fn line -> String.split(line, "=", parts: 2) end)
     |> Enum.into(%{}, fn [k, v] -> {k, v} end)
   end
 
   defp params_to_response(params, endpoint) do
-
     Response.new(
       url: endpoint,
       halted: false,
@@ -81,11 +86,11 @@ defmodule YubikeyOTP.HTTP do
       nonce: params["nonce"],
       hmac: params["h"],
       timestamp: params["t"],
-      status: params["status"]
-              |> String.downcase()
-              |> String.to_atom
+      status:
+        params["status"]
+        |> String.downcase()
+        |> String.to_atom()
     )
-
   end
 
   defp error_to_response(endpoint, code, message) do
@@ -96,10 +101,10 @@ defmodule YubikeyOTP.HTTP do
       nonce: "error",
       message: message,
       hmac: nil,
-      timestamp: DateTime.utc_now
-                 |> DateTime.to_string(),
+      timestamp:
+        DateTime.utc_now()
+        |> DateTime.to_string(),
       status: code
     )
   end
-
 end

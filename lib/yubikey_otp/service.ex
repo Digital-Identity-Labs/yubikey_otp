@@ -1,5 +1,4 @@
 defmodule YubikeyOTP.Service do
-
   @moduledoc false
 
   alias __MODULE__
@@ -9,7 +8,7 @@ defmodule YubikeyOTP.Service do
     "https://api2.yubico.com/wsapi/2.0/verify",
     "https://api3.yubico.com/wsapi/2.0/verify",
     "https://api4.yubico.com/wsapi/2.0/verify",
-    "https://api5.yubico.com/wsapi/2.0/verify",
+    "https://api5.yubico.com/wsapi/2.0/verify"
   ]
 
   @enforce_keys [:api_id, :urls]
@@ -20,7 +19,7 @@ defmodule YubikeyOTP.Service do
     hmac: false,
     urls: @yubico_endpoints,
     timestamp: true,
-    timeout: 1000,
+    timeout: 1000
   ]
 
   def new(options) do
@@ -34,5 +33,4 @@ defmodule YubikeyOTP.Service do
       {:ok, service}
     end
   end
-
 end

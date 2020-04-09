@@ -1,5 +1,4 @@
 defmodule APIResponses do
-
   def default_service do
     %YubikeyOTP.Service{
       api_id: 1,
@@ -18,10 +17,7 @@ defmodule APIResponses do
   end
 
   def yubicloud do
-
-
   end
-
 end
 
 # https://api.yubico.com/wsapi/2.0/verify?otp=vvvvvvcucrlcietctckflvnncdgckubflugerlnr&id=87&timeout=8&sl=50&nonce=askjdnkajsndjkasndkjsnad

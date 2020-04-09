@@ -1,5 +1,4 @@
 defmodule YubikeyOTP.Response do
-
   @moduledoc false
 
   alias __MODULE__
@@ -27,5 +26,4 @@ defmodule YubikeyOTP.Response do
   def validate(response) do
     {:ok, response}
   end
-
 end

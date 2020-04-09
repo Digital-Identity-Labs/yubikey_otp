@@ -1,5 +1,4 @@
 defmodule YubikeyOTP do
-
   @moduledoc """
       This module contains all the functions you'll need to authenticate Yubikey OTPs.
   """
@@ -13,8 +12,7 @@ defmodule YubikeyOTP do
   @spec service(options :: map) :: {:ok, %Service{}} | {:error, atom}
   def service(options) do
     with {:ok, service} <- Service.new(options),
-         {:ok, service} <- Service.validate(service)
-      do
+         {:ok, service} <- Service.validate(service) do
       {:ok, service}
     else
       err -> err
@@ -32,19 +30,14 @@ defmodule YubikeyOTP do
 
   @spec verify(otp :: binary, service :: %Service{}) :: {:ok, :ok} | {:error, atom}
   def verify(otp, service) do
-
     with {:ok, otp} <- Otp.validate(otp),
          {:ok, request} <- Request.new(otp, service),
-         {:ok, request} <- Request.validate(request)
-      do
-
+         {:ok, request} <- Request.validate(request) do
       request
       |> Controller.verify(service)
-
     else
       err -> err
     end
-
   end
 
   @spec verify?(otp :: binary, service :: %Service{}) :: true | false
@@ -54,5 +47,4 @@ defmodule YubikeyOTP do
       _ -> false
     end
   end
-
 end
