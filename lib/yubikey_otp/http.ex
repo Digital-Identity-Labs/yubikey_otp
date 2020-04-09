@@ -20,7 +20,7 @@ defmodule YubikeyOTP.HTTP do
   def verify(request, endpoint) do
 
     case get(endpoint, query: request_to_query(request)) do
-      {:ok, %Tesla.Env{status: 200, body: body}} -> process_api_response(body)
+      {:ok, %Tesla.Env{status: 200, body: body}} -> process_api_response(endpoint, body)
       {:error, :econnrefused} -> process_error(endpoint, :http_cannot_connect)
       {:ok, http_response} -> parse_http_status(endpoint, http_response)
       {:error, message} -> process_error(endpoint, :http_unknown, message)
@@ -54,10 +54,10 @@ defmodule YubikeyOTP.HTTP do
     end
   end
 
-  defp process_api_response(body) do
+  defp process_api_response(endpoint, body) do
     body
     |> parse_response_params()
-    |> params_to_response()
+    |> params_to_response(endpoint)
   end
 
   defp process_error(endpoint, code, message \\ "") do
@@ -72,9 +72,10 @@ defmodule YubikeyOTP.HTTP do
     |> Enum.into(%{}, fn [k, v] -> {k, v} end)
   end
 
-  defp params_to_response(params) do
+  defp params_to_response(params, endpoint) do
 
     Response.new(
+      url: endpoint,
       halted: false,
       otp: params["otp"],
       nonce: params["nonce"],
