@@ -29,7 +29,7 @@ button on a Yubikey causes it to type a new password that can be checked against
  be used for authentication with both command-line and web applications, but are most commonly used alongside traditional
   passwords to provide Two Factor authentication on web sites - the key is "something you have".
 
-All Yubikeys since 2008 can generate OTPs, but modern Yubikeys also support the U2F and WebAuthn standards: these are more secure
+Most Yubikeys since 2008 can generate OTPs, but modern Yubikeys also support the U2F and WebAuthn standards: these are more secure
 and immune to phishing and should be prefered for new services. The older OTP format is more widely deployed and still actively
 used. This library only supports the older OTP format.
 
@@ -48,6 +48,13 @@ the API result. It follows Yubico's recommendation to send queries to five diffe
     YubikeyOTP.verify("ccccccclzlojikekndkhfibggvkgujttihkcuvkjfrvj", service)
     # => {:error, :replayed_otp}
 ```
+
+## Requirements
+
+* You'll need a Yubikey! They can be bought from [Yubico](https://www.yubico.com/store/) or other online stores such as
+Amazon. The cheaper "Security Key" range does not generate OTPs, only WebAuthn, and won't work with this code.as
+
+* You need to [sign up for an API key](https://upgrade.yubico.com/getapikey/) (using your Yubikey)
 
 ## API Documentation
 
