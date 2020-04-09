@@ -2,7 +2,7 @@ defmodule YubikeyOTP.HTTP do
 
   @moduledoc false
 
-  alias __MODULE__
+  @agent_version "0.1.0"
 
   alias YubikeyOTP.Nonce
   alias YubikeyOTP.Request
@@ -13,14 +13,14 @@ defmodule YubikeyOTP.HTTP do
 
   plug Tesla.Middleware.BaseUrl, "https://api.yubico.com/wsapi/2.0/verify"
   plug Tesla.Middleware.FollowRedirects, max_redirects: 1
+  plug Tesla.Middleware.Headers, [{"user-agent", "YubikeyOTP +https://github.com/Digital-Identity-Labs/yubikey_otp YubikeyOTP/#{@agent_version}"}]
   plug Tesla.Middleware.Logger
   plug Tesla.Middleware.KeepRequest
-
 
   def verify(request, endpoint) do
 
     case get(endpoint, query: request_to_query(request)) do
-      {:ok, %Tesla.Env{status: 200, body: body} = http_response} -> process_api_response(body)
+      {:ok, %Tesla.Env{status: 200, body: body}} -> process_api_response(body)
       {:error, :econnrefused} -> process_error(endpoint, :http_cannot_connect)
       {:ok, http_response} -> parse_http_status(endpoint, http_response)
       {:error, message} -> process_error(endpoint, :http_unknown, message)
@@ -43,7 +43,7 @@ defmodule YubikeyOTP.HTTP do
   end
 
   defp filter_nils(map) do
-    Enum.filter(map, fn {k, v} -> !is_nil(v) end)
+    Enum.filter(map, fn {_, v} -> !is_nil(v) end)
   end
 
   defp parse_http_status(endpoint, http_response) do
@@ -89,9 +89,11 @@ defmodule YubikeyOTP.HTTP do
 
   defp error_to_response(endpoint, code, message) do
     Response.new(
+      url: endpoint,
       halted: true,
       otp: "error",
       nonce: "error",
+      message: message,
       hmac: nil,
       timestamp: DateTime.utc_now
                  |> DateTime.to_string(),
