@@ -7,9 +7,11 @@ defmodule YubikeyOTP.Response do
   @enforce_keys [:otp, :status, :type]
 
   defstruct [
+    :url,
     :otp,
     :nonce,
     :hmac,
+    :message,
     :timestamp,
     :status,
     :sessioncounter,
