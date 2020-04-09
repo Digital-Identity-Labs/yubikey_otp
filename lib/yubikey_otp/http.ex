@@ -1,13 +1,13 @@
-defmodule YubikeyOtp.Http do
+defmodule YubikeyOTP.HTTP do
 
   @moduledoc false
 
   alias __MODULE__
 
-  alias YubikeyOtp.Nonce
-  alias YubikeyOtp.Request
-  alias YubikeyOtp.Response
-  alias YubikeyOtp.Signature
+  alias YubikeyOTP.Nonce
+  alias YubikeyOTP.Request
+  alias YubikeyOTP.Response
+  alias YubikeyOTP.Signature
 
   use Tesla
 

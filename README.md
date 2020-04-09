@@ -40,12 +40,12 @@ the API result. It follows Yubico's recommendation to send queries to five diffe
 
     my_id = Application.get_env(:my_app, :yubikey_client_id)
 
-    {:ok, service} = YubikeyOtp.service(api_id: my_id)
+    {:ok, service} = YubikeyOTP.service(api_id: my_id)
 
-    YubikeyOtp.verify("ccccccclzlojikekndkhfibggvkgujttihkcuvkjfrvj", service)
+    YubikeyOTP.verify("ccccccclzlojikekndkhfibggvkgujttihkcuvkjfrvj", service)
     # => {:ok, :ok}
 
-    YubikeyOtp.verify("ccccccclzlojikekndkhfibggvkgujttihkcuvkjfrvj", service)
+    YubikeyOTP.verify("ccccccclzlojikekndkhfibggvkgujttihkcuvkjfrvj", service)
     # => {:error, :replayed_otp}
 ```
 

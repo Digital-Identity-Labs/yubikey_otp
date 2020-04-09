@@ -1,4 +1,4 @@
-defmodule YubikeyOtp.Signature do
+defmodule YubikeyOTP.Signature do
 
   @moduledoc false
 

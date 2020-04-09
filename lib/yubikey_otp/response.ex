@@ -1,4 +1,4 @@
-defmodule YubikeyOtp.Response do
+defmodule YubikeyOTP.Response do
 
   @moduledoc false
 

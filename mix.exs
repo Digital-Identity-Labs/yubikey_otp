@@ -1,4 +1,4 @@
-defmodule YubikeyOtp.MixProject do
+defmodule YubikeyOTP.MixProject do
   use Mix.Project
 
   def project do

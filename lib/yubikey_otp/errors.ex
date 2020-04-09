@@ -1,4 +1,4 @@
-defmodule YubikeyOtp.Errors do
+defmodule YubikeyOTP.Errors do
 
   @moduledoc """
     This module should contain all the errors that can be returned by Yubikey OTP, with descriptions.

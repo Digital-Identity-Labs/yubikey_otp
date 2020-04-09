@@ -1,4 +1,4 @@
-defmodule YubikeyOtp.Nonce do
+defmodule YubikeyOTP.Nonce do
 
   @moduledoc false
 

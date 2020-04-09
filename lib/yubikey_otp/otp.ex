@@ -1,4 +1,4 @@
-defmodule YubikeyOtp.Otp do
+defmodule YubikeyOTP.Otp do
 
   @moduledoc false
 

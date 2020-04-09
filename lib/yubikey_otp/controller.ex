@@ -1,11 +1,11 @@
-defmodule YubikeyOtp.Controller do
+defmodule YubikeyOTP.Controller do
 
   @moduledoc false
 
   @timeout 4000
 
-  alias YubikeyOtp.Http
-  alias YubikeyOtp.Response
+  alias YubikeyOTP.HTTP
+  alias YubikeyOTP.Response
 
   def verify(request, service) do
     request
@@ -17,7 +17,7 @@ defmodule YubikeyOtp.Controller do
   end
 
   def prepare_api_tasks(request, urls) do
-    Enum.map(urls, fn (url) -> Task.async(fn -> Http.verify(request, url) end) end)
+    Enum.map(urls, fn (url) -> Task.async(fn -> HTTP.verify(request, url) end) end)
   end
 
   def make_concurrent_api_calls(tasks) do
