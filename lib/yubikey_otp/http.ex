@@ -13,7 +13,7 @@ defmodule YubikeyOtp.Http do
 
   plug Tesla.Middleware.BaseUrl, "https://api.yubico.com/wsapi/2.0/verify"
   plug Tesla.Middleware.FollowRedirects, max_redirects: 1
-  #plug Tesla.Middleware.Logger
+  plug Tesla.Middleware.Logger
   plug Tesla.Middleware.KeepRequest
 
 
