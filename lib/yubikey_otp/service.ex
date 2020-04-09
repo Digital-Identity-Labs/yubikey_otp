@@ -15,20 +15,24 @@ defmodule YubikeyOtp.Service do
   @enforce_keys [:api_id, :urls]
 
   defstruct [
-    :api_id,
     :api_key,
+    api_id: 0,
     hmac: false,
     urls: @yubico_endpoints,
     timestamp: true,
     timeout: 1000,
   ]
 
-  def new(options \\ %{}) do
-    struct(Service, options)
+  def new(options) do
+    {:ok, struct(Service, options)}
   end
 
   def validate(service) do
-    {:ok, service}
+    if service.api_id == 0 do
+      {:error, :service_missing_api_id}
+    else
+      {:ok, service}
+    end
   end
 
 end

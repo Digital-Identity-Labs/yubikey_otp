@@ -21,6 +21,7 @@ defmodule YubikeyOtp.Errors do
     http_unknown: "An unknown HTTP API error occurred",
     http_cannot_connect: "Client cannot connect to server at all",
     otp_invalid: "The supplied OTP is invalid",
+    service_missing_api_id: "The service was not given an API ID as :api_id"
   }
 
   def list do
