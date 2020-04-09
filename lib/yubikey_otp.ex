@@ -10,11 +10,15 @@ defmodule YubikeyOtp do
   alias YubikeyOtp.Response
   alias YubikeyOtp.Service
 
-  @spec service(options :: map) :: {:ok, %Service{}}
+  @spec service(options :: map) :: {:ok, %Service{}} | {:error, atom}
   def service(options) do
-    options
-    |> Service.new()
-    |> Service.validate()
+    with {:ok, service} <- Service.new(options),
+         {:ok, service} <- Service.validate(service)
+      do
+      {:ok, service}
+    else
+      err -> err
+    end
   end
 
   @spec device_id(otp :: binary) :: {:ok, binary} | {:error, :otp_invalid}
@@ -36,7 +40,6 @@ defmodule YubikeyOtp do
 
       request
       |> Controller.verify(service)
-      #|> Response.success()
 
     else
       err -> err
