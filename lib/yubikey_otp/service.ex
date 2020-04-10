@@ -23,11 +23,13 @@ defmodule YubikeyOTP.Service do
   ]
 
   ## A simple merge of options and defaults
+  @spec new(options :: map()) :: {:ok, struct()} | {:error, atom()}
   def new(options) do
     {:ok, struct(Service, options)}
   end
 
   ## We need to make sure the user has actually set their own API ID
+  @spec validate(service :: struct()) :: {:ok, struct()} | {:error, :service_missing_api_id}
   def validate(service) do
     if service.api_id == 0 do
       {:error, :service_missing_api_id}

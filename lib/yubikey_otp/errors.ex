@@ -23,10 +23,12 @@ defmodule YubikeyOTP.Errors do
     service_missing_api_id: "The service was not given an API ID as :api_id"
   }
 
+  @spec list() :: [atom()]
   def list do
     Map.keys(@errors)
   end
 
+  @spec describe(code :: atom()) :: binary()
   def describe(code) do
     @errors[code] || "Unknown error type"
   end

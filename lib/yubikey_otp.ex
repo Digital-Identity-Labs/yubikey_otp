@@ -28,7 +28,7 @@ defmodule YubikeyOTP do
     end
   end
 
-  @spec verify(otp :: binary, service :: %Service{}) :: {:ok, :ok} | {:error, atom}
+  @spec verify(otp :: binary(), service :: %Service{}) :: {:ok, :ok} | {:error, atom()}
   def verify(otp, service) do
     with {:ok, otp} <- Otp.validate(otp),
          {:ok, request} <- Request.new(otp, service),
@@ -43,8 +43,9 @@ defmodule YubikeyOTP do
   @spec verify?(otp :: binary, service :: %Service{}) :: true | false
   def verify?(otp, service) do
     case verify(otp, service) do
-      {:ok, _} -> true
-      _ -> false
+      {:ok, :ok} -> true
+      {:error, _} -> false
     end
   end
 end
+

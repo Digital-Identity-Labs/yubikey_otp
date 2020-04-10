@@ -5,10 +5,10 @@ defmodule YubikeyOTP.Signature do
 
   ## WIP
 
-  def request_hmac(query_string, key) do
-  end
-
-  def valid_response_hmac?(query_string, key) do
-  end
+#  def request_hmac(query_string, key) do
+#  end
+#
+#  def valid_response_hmac?(query_string, key) do
+#  end
 
 end
