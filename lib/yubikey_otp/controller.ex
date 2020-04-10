@@ -30,23 +30,25 @@ defmodule YubikeyOTP.Controller do
   defp make_concurrent_api_calls(tasks) do
     tasks
     |> Task.yield_many(@timeout)
-    |> Enum.map(fn {task, result} ->
-      case result do
-        nil ->
-          Task.shutdown(task, :brutal_kill)
-          task_failure_response(:sys_timeout, "Task shutdown")
+    |> Enum.map(
+         fn {task, result} ->
+           case result do
+             nil ->
+               Task.shutdown(task, :brutal_kill)
+               task_failure_response(:sys_timeout, "Task shutdown")
 
-        {:exit, reason} ->
-          task_failure_response(:sys_exit, reason)
+             {:exit, reason} ->
+               task_failure_response(:sys_exit, reason)
 
-        {:ok, response} ->
-          task_success_and_completion(response, task, tasks)
-      end
-    end)
+             {:ok, response} ->
+               task_success_and_completion(response, task, tasks)
+           end
+         end
+       )
   end
 
   ## Process any API responses, and maybe try to stop other ongoing requests
-  @spec task_success_and_completion(response ::struct(), task :: struct(), tasks :: [struct()]) :: struct()
+  @spec task_success_and_completion(response :: struct(), task :: struct(), tasks :: [struct()]) :: struct()
   defp task_success_and_completion(response, task, tasks) do
 
     if response.status == :ok do
@@ -57,7 +59,7 @@ defmodule YubikeyOTP.Controller do
   end
 
   ## In theory this kills any active agents in the list, in reality... maybe not
-  @spec immediately_kill_other_tasks(task ::struct(), tasks :: [struct()]) :: no_return
+  @spec immediately_kill_other_tasks(task :: struct(), tasks :: [struct()]) :: no_return
   defp immediately_kill_other_tasks(_this_task, all_tasks) do
     all_tasks
     |> Enum.each(fn task -> Task.shutdown(task, :brutal_kill) end)
@@ -93,7 +95,7 @@ defmodule YubikeyOTP.Controller do
   ## Make a response out of a low-level HTTP failure
   @spec task_failure_response(code :: atom(), _message :: binary()) :: struct()
   defp task_failure_response(code, _message) do
-    Response.new(
+    {:ok, response} = Response.new(
       halted: true,
       otp: "error",
       nonce: "error",
@@ -103,5 +105,6 @@ defmodule YubikeyOTP.Controller do
         |> DateTime.to_string(),
       status: code
     )
+    response
   end
 end

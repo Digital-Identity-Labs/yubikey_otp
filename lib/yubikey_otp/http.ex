@@ -99,7 +99,7 @@ defmodule YubikeyOTP.HTTP do
   ## turn the API params map into a record
   @spec params_to_response(params :: map(), endpoint :: binary()) :: struct()
   defp params_to_response(params, endpoint) do
-    Response.new(
+  {:ok, response} = Response.new(
       url: endpoint,
       halted: false,
       otp: params["otp"],
@@ -111,12 +111,13 @@ defmodule YubikeyOTP.HTTP do
         |> String.downcase()
         |> String.to_atom()
     )
+    response
   end
 
   ## Return errors are responses too
   @spec error_to_response(endpoint :: binary(), code :: atom(), message :: binary()) :: struct()
   defp error_to_response(endpoint, code, message) do
-    Response.new(
+    {:ok, response} = Response.new(
       url: endpoint,
       halted: true,
       otp: "error",
@@ -128,5 +129,6 @@ defmodule YubikeyOTP.HTTP do
         |> DateTime.to_string(),
       status: code
     )
+    response
   end
 end
