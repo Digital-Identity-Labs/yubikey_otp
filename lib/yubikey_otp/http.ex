@@ -23,6 +23,7 @@ defmodule YubikeyOTP.HTTP do
   plug(Tesla.Middleware.Logger)
   plug(Tesla.Middleware.KeepRequest)
 
+  ## Make an API GET request to *one* specified API endpoint URL
   def verify(request, endpoint) do
     case get(endpoint, query: request_to_query(request)) do
       {:ok, %Tesla.Env{status: 200, body: body}} -> process_api_response(endpoint, body)
@@ -35,6 +36,7 @@ defmodule YubikeyOTP.HTTP do
       process_error(endpoint, :http_cannot_connect, "Could not connect to #{endpoint} API: #{e}")
   end
 
+  ## Build an HTTP GET query string out of the request struct
   defp request_to_query(request) do
     %{
       id: request.id,
@@ -47,10 +49,12 @@ defmodule YubikeyOTP.HTTP do
     |> filter_nils()
   end
 
+  ## We don't want empty values in the query string
   defp filter_nils(map) do
     Enum.filter(map, fn {_, v} -> !is_nil(v) end)
   end
 
+  ## If it's not a 200-SUCCESS we need to report it
   defp parse_http_status(endpoint, http_response) do
     case http_response.status do
       404 -> process_error(endpoint, :http_404)
@@ -59,16 +63,19 @@ defmodule YubikeyOTP.HTTP do
     end
   end
 
+  ## If we get a 200 and a body from the API we can build a response
   defp process_api_response(endpoint, body) do
     body
     |> parse_response_params()
     |> params_to_response(endpoint)
   end
 
+  ## Consistency is the hobgoblin of little minds
   defp process_error(endpoint, code, message \\ "") do
     error_to_response(endpoint, code, message)
   end
 
+  ## Turn the Yubicloud response body into a map
   defp parse_response_params(body) do
     body
     |> String.trim()
@@ -78,6 +85,7 @@ defmodule YubikeyOTP.HTTP do
     |> Enum.into(%{}, fn [k, v] -> {k, v} end)
   end
 
+  ## turn the API params map into a record
   defp params_to_response(params, endpoint) do
     Response.new(
       url: endpoint,
@@ -93,6 +101,7 @@ defmodule YubikeyOTP.HTTP do
     )
   end
 
+  ## Return errors are responses too
   defp error_to_response(endpoint, code, message) do
     Response.new(
       url: endpoint,

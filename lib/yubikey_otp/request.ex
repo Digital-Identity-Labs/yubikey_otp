@@ -14,6 +14,7 @@ defmodule YubikeyOTP.Request do
     :timeout
   ]
 
+  ## Requests are mostly Service info. Each request is converted into a number of actual HTTP calls with their own info
   def new(otp, service) do
     request = %Request{
       id: service.api_id,

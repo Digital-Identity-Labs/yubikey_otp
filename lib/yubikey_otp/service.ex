@@ -22,10 +22,12 @@ defmodule YubikeyOTP.Service do
     timeout: 1000
   ]
 
+  ## A simple merge of options and defaults
   def new(options) do
     {:ok, struct(Service, options)}
   end
 
+  ## We need to make sure the user has actually set their own API ID
   def validate(service) do
     if service.api_id == 0 do
       {:error, :service_missing_api_id}

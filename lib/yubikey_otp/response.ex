@@ -19,6 +19,7 @@ defmodule YubikeyOTP.Response do
     halted: false
   ]
 
+  ## Simple merge of options and defaults
   def new(options \\ %{}) do
     struct(Response, options)
   end

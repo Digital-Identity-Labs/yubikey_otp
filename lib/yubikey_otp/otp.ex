@@ -1,11 +1,13 @@
 defmodule YubikeyOTP.Otp do
   @moduledoc false
 
+  ## Slice the device ID string off the front of the OTP
   def device_id(otp) do
     otp
     |> String.replace_trailing(String.slice(otp, -32..64), "")
   end
 
+  ## Normalise and check the OTP (mostly by size - the character set can vary)
   def validate(otp) do
     otp =
       otp
