@@ -36,20 +36,20 @@ defmodule YubikeyOTP do
 
   ## Example
 
-        iex> {:ok, service} = YubikeyOTP.service(api_id: "65749337983737")
-        {:ok,
-          %YubikeyOTP.Service{
-          api_id: "65749337983737",
-          api_key: nil,
-          hmac: false,
-          timeout: 1000,
-          timestamp: true,
-          urls: ["https://api.yubico.com/wsapi/2.0/verify",
-            "https://api2.yubico.com/wsapi/2.0/verify",
-            "https://api3.yubico.com/wsapi/2.0/verify",
-            "https://api4.yubico.com/wsapi/2.0/verify",
-            "https://api5.yubico.com/wsapi/2.0/verify"]
-        }}
+      iex> {:ok, service} = YubikeyOTP.service(api_id: "65749337983737")
+      {:ok,
+        %YubikeyOTP.Service{
+        api_id: "65749337983737",
+        api_key: nil,
+        hmac: false,
+        timeout: 1000,
+        timestamp: true,
+        urls: ["https://api.yubico.com/wsapi/2.0/verify",
+          "https://api2.yubico.com/wsapi/2.0/verify",
+          "https://api3.yubico.com/wsapi/2.0/verify",
+          "https://api4.yubico.com/wsapi/2.0/verify",
+          "https://api5.yubico.com/wsapi/2.0/verify"]
+      }}
 
     The Yubicloud API has five different endpoint URLs, and by default these are all used concurrently.
 
@@ -95,10 +95,10 @@ defmodule YubikeyOTP do
 
   ## Example
 
-        iex> YubikeyOTP.verify("ccccccclulvjbthgghkbvvlcludiklkncnecncevcrlg", service)
-        {:ok, :ok}
-        iex> YubikeyOTP.verify("ccccccclulvjbthgghkbvvlcludiklkncnecncevcrlg", service)
-        {:error, :replayed_otp}
+      iex> YubikeyOTP.verify("ccccccclulvjbthgghkbvvlcludiklkncnecncevcrlg", service)
+      {:ok, :ok}
+      iex> YubikeyOTP.verify("ccccccclulvjbthgghkbvvlcludiklkncnecncevcrlg", service)
+      {:error, :replayed_otp}
 
   """
   @spec verify(otp :: binary(), service :: %Service{}) :: {:ok, :ok} | {:error, atom()}
@@ -121,10 +121,10 @@ defmodule YubikeyOTP do
 
   ## Example
 
-        iex> YubikeyOTP.verify?("ccccccclulvjihcchvujedikcndnbuttfutgvbcgblhk", service)
-        true
-        iex> YubikeyOTP.verify?("ccccccclulvjihcchvujedikcndnbuttfutgvbcgblhk", service)
-        false
+      iex> YubikeyOTP.verify?("ccccccclulvjihcchvujedikcndnbuttfutgvbcgblhk", service)
+      true
+      iex> YubikeyOTP.verify?("ccccccclulvjihcchvujedikcndnbuttfutgvbcgblhk", service)
+      false
 
   """
   @spec verify?(otp :: binary, service :: %Service{}) :: true | false

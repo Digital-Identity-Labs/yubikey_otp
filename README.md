@@ -3,6 +3,8 @@
 YubikeyOTP is an Elixir client for validating Yubikey one-time-passwords. It can validate OTPs using Yubico's public
 API or by using your own or third-party OTP validation services.
 
+This first release has not been used in production yet and doesn't have enough tests - please try it and get in touch!
+
 [![Hex pm](http://img.shields.io/hexpm/v/yubikey_otp.svg?style=flat)](https://hex.pm/packages/yubikey_otp)
 [![API Docs](https://img.shields.io/badge/api-docs-yellow.svg?style=flat)](http://hexdocs.pm/yubikey_otp/)
 [![Build Status](https://travis-ci.org/Digital-Identity-Labs/yubikey_otp.svg?branch=master
@@ -52,7 +54,7 @@ the API result. It follows Yubico's recommendation to send queries to five diffe
 ## Requirements
 
 * You'll need a Yubikey! They can be bought from [Yubico](https://www.yubico.com/store/) or other online stores such as
-Amazon. The cheaper "Security Key" range does not generate OTPs, only WebAuthn, and won't work with this code.as
+Amazon. The cheaper "Security Key" range does not generate OTPs, only WebAuthn, and won't work with this code.
 
 * You need to [sign up for an API key](https://upgrade.yubico.com/getapikey/) (using your Yubikey)
 
