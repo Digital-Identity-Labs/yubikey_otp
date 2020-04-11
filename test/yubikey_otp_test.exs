@@ -1,6 +1,6 @@
 defmodule YubikeyOTPTest do
   use ExUnit.Case
-  doctest YubikeyOTP
+  #doctest YubikeyOTP
 
   @api_id 1
 
@@ -10,10 +10,12 @@ defmodule YubikeyOTPTest do
     bad_otp =
       "h=Dfogk5qwCcw6+pr1G64gmomCKgQ=\nt=2020-04-09T09:31:56Z0363\notp=ccccccclulvjgvivliddvvdhdtuculkgikhnrgeueeri\nnonce=vwC1WQd3ip6QLPJfUJji5n\nstatus=BAD_OTP\n\n"
 
-    Tesla.Mock.mock(fn
-      %{method: :get} ->
-        %Tesla.Env{status: 500, body: bad_otp}
-    end)
+    Tesla.Mock.mock(
+      fn
+        %{method: :get} ->
+          %Tesla.Env{status: 500, body: bad_otp}
+      end
+    )
 
     #    Query: id: 1
     # Query: nonce: njYDJDEARBOFgiJW8b6yIG
@@ -53,8 +55,8 @@ defmodule YubikeyOTPTest do
     end
 
     test "returns an :ok response when passed a valid, fresh OTP" do
-      {:ok, service} =
-        YubikeyOTP.service(api_id: @api_id, urls: ["https://api.yubico.com/wsapi/2.0/verify"])
+      #      {:ok, service} =
+      #        YubikeyOTP.service(api_id: @api_id, urls: ["https://api.yubico.com/wsapi/2.0/verify"])
 
       # assert YubikeyOTP.verify("ccccccclulvjgvivliddvvdhdtuculkgikhnrgeuekri", service) == {:ok, :ok}
     end
