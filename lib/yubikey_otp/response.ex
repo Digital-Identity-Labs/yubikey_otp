@@ -20,7 +20,7 @@ defmodule YubikeyOTP.Response do
   ]
 
   ## Simple merge of options and defaults
-  @spec new(options :: map() | keyword()) :: {:ok, struct()}, {:error, atom()}
+  @spec new(options :: map() | keyword()) :: {:ok, struct()} | {:error, atom()}
   def new(options \\ %{}) do
     response = struct(Response, options)
     {:ok, response}
