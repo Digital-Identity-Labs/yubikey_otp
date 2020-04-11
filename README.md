@@ -1,6 +1,6 @@
 # YubikeyOTP
 
-YubikeyOTP is an Elixir client for validating Yubikey one-time-passwords. It can validate OTPs using Yubico's public
+`YubikeyOTP` is an Elixir client for validating Yubikey one-time-passwords. It can validate OTPs using Yubico's public
 API or by using your own or third-party OTP validation services.
 
 This first release has not been used in production yet and doesn't have enough tests - please try it and get in touch!
@@ -29,7 +29,7 @@ end
 A Yubikey is a tiny USB device that connects to your computer as if it was USB keyboard. Pressing the
 button on a Yubikey causes it to type a new password that can be checked against a remote server *once*. Yubikeys can
  be used for authentication with both command-line and web applications, but are most commonly used alongside traditional
-  passwords to provide Two Factor authentication on web sites - the key is "something you have".
+  passwords to provide Two Factor Authentication on web sites - the key is "something you have".
 
 Most Yubikeys since 2008 can generate OTPs, but modern Yubikeys also support the U2F and WebAuthn standards: these are more secure
 and immune to phishing and should be prefered for new services. The older OTP format is more widely deployed and still actively
