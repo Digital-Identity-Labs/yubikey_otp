@@ -24,7 +24,7 @@ defmodule YubikeyOTP.Service do
 
   ## A simple merge of options and defaults
   @spec new(options :: map() | keyword()) :: {:ok, struct()} | {:error, atom()}
-  def new(options) do
+  def new(options \\ %{}) do
     {:ok, struct(Service, options)}
   end
 
