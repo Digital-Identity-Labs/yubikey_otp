@@ -1,11 +1,15 @@
-defmodule YubikeyOTP.Otp do
+defmodule YubikeyOTP.OTP do
   @moduledoc false
 
   ## Slice the device ID string off the front of the OTP
   @spec device_id(otp :: binary()) :: binary()
   def device_id(otp) do
-    otp
-    |> String.replace_trailing(String.slice(otp, -32..64), "")
+    with {:ok, otp} <- validate(otp) do
+      {:ok, String.replace_trailing(otp, String.slice(otp, -32..64), "")}
+    else
+      err -> err
+    end
+
   end
 
   ## Normalise and check the OTP (mostly by size - the character set can vary)

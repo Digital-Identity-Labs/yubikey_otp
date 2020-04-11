@@ -22,7 +22,7 @@ defmodule YubikeyOTP do
   """
 
   alias YubikeyOTP.Controller
-  alias YubikeyOTP.Otp
+  alias YubikeyOTP.OTP
   alias YubikeyOTP.Request
   alias YubikeyOTP.Response
   alias YubikeyOTP.Service
@@ -78,11 +78,7 @@ defmodule YubikeyOTP do
   """
   @spec device_id(otp :: binary) :: {:ok, binary} | {:error, :otp_invalid}
   def device_id(otp) do
-    with {:ok, otp} <- Otp.validate(otp) do
-      {:ok, Otp.device_id(otp)}
-    else
-      err -> err
-    end
+    OTP.device_id(otp)
   end
 
   @doc """
@@ -103,7 +99,7 @@ defmodule YubikeyOTP do
   """
   @spec verify(otp :: binary(), service :: %Service{}) :: {:ok, :ok} | {:error, atom()}
   def verify(otp, service) do
-    with {:ok, otp} <- Otp.validate(otp),
+    with {:ok, otp} <- OTP.validate(otp),
          {:ok, request} <- Request.new(otp, service),
          {:ok, request} <- Request.validate(request) do
       request
