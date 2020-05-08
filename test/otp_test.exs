@@ -1,5 +1,6 @@
 defmodule OTPTest do
   use ExUnit.Case
+  doctest YubikeyOTP.OTP
   #doctest YubikeyOTP.Nonce
 
   @good_otp "ccccccclulvjbbhccnndrietjjnkeclcvjgrnhcivtgd"
