@@ -70,7 +70,7 @@ defmodule YubikeyOTPTest do
       {:ok, service} =
         YubikeyOTP.service(api_id: @api_id, urls: ["https://api.yubico.com/wsapi/2.0/verify"])
 
-      assert YubikeyOTP.verify("ccccccclulvzzzzzzzzzzzzzzzzzzzzzzzzz", service) ==
+      assert YubikeyOTP.verify("cccccccbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", service) ==
                {:error, :bad_otp}
     end
   end
