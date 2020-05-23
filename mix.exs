@@ -4,7 +4,7 @@ defmodule YubikeyOTP.MixProject do
   def project do
     [
       app: :yubikey_otp,
-      version: "0.1.1",
+      version: "0.2.0",
       elixir: "~> 1.7",
       description: "Elixir client library for validating Yubikey one-time-passwords (OTPs)",
       package: package(),
