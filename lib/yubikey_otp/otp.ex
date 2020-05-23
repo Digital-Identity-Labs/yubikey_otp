@@ -1,14 +1,3 @@
-defmodule YubikeyOTP.OTP.InvalidChecksumError do
-  @moduledoc "Error raised when the OTP checksum is invalid"
-  defexception message: "OTP checksum is invalid"
-end
-
-defmodule YubikeyOTP.OTP.ParseError do
-  @moduledoc "Error raised when parsing the OTP failed"
-  defexception message: "OTP parsing failed"
-end
-
-
 defmodule YubikeyOTP.OTP do
   @moduledoc """
   ## OTP Format
