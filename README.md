@@ -10,8 +10,7 @@ something doesn't behave as expected.
 
 [![Hex pm](http://img.shields.io/hexpm/v/yubikey_otp.svg?style=flat)](https://hex.pm/packages/yubikey_otp)
 [![API Docs](https://img.shields.io/badge/api-docs-yellow.svg?style=flat)](http://hexdocs.pm/yubikey_otp/)
-[![Build Status](https://travis-ci.org/Digital-Identity-Labs/yubikey_otp.svg?branch=master
-"Build Status")](https://travis-ci.org/Digital-Identity-Labs/yubikey_otp)
+![Github Elixir CI](https://github.com/Digital-Identity-Labs/yubikey_otp/workflows/Elixir%20CI/badge.svg)
 [![License](https://img.shields.io/hexpm/l/yubikey_otp.svg)](LICENSE)
 
 ## Installation
