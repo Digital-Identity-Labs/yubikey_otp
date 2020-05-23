@@ -3,7 +3,9 @@
 `YubikeyOTP` is an Elixir client for authenticating Yubikey one-time-passwords. It can verify OTPs using Yubico's public
 API or by using your own or third-party OTP validation services.
 
-This first release has not been used in production yet and doesn't have enough tests - please try it and get in touch if
+In addition to acting as a client, YubikeyOTP's OTP parsing feature can be used to build your own validation service.
+
+This early release has not been used in production yet and doesn't have enough tests - please try it and get in touch if
 something doesn't behave as expected.
 
 [![Hex pm](http://img.shields.io/hexpm/v/yubikey_otp.svg?style=flat)](https://hex.pm/packages/yubikey_otp)
@@ -20,7 +22,7 @@ dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:yubikey_otp, "~> 0.1.0"}
+    {:yubikey_otp, "~> 0.1.1"}
   ]
 end
 ```
@@ -68,6 +70,10 @@ Full API documentation can be found at
 
 You can request new features by creating an [issue](https://github.com/Digital-Identity-Labs/yubikey_otp/issues),
 or submit a [pull request](https://github.com/Digital-Identity-Labs/yubikey_otp/pulls) with your contribution.
+
+## Contributors
+
+* [Thom Dixon](https://github.com/thomdixon)
 
 ## Copyright and License
 
