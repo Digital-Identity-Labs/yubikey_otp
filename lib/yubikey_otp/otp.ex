@@ -24,6 +24,7 @@ defmodule YubikeyOTP.OTP do
   }
 
   @otp_length 44
+  @key_format_error "Error parsing key. Key should be 128-bits stored as a 16 byte binary (preferred) or 32 character hex string"
 
   defmacrop is_otp(string) do
     quote do
@@ -186,6 +187,7 @@ defmodule YubikeyOTP.OTP do
   defp do_parse!(otp, opts) do
     with decoded_otp <- ModHex.decode!(otp.encrypted_otp),
          key <- Keyword.fetch!(opts, :key),
+         key <- format_key(key),
          <<
            private_id :: binary-size(6),
            use_counter :: binary-size(2),
@@ -213,4 +215,22 @@ defmodule YubikeyOTP.OTP do
   rescue
     e in ErlangError -> reraise OTP.ParseError, ErlangError.message(e), __STACKTRACE__
   end
+
+
+  defp format_key(key) when is_binary(key) and byte_size(key) == 32 do
+    case Base.decode16(String.downcase(key), case: :lower) do
+      {:ok, key} -> key
+      _ -> raise raise OTP.ParseError, @key_format_error
+    end
+  end
+
+  defp format_key(key)
+       when is_binary(key) and byte_size(key) == 16 do
+    key
+  end
+
+  defp format_key(_) do
+    raise raise OTP.ParseError, @key_format_error
+  end
+
 end
