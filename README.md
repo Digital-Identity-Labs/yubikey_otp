@@ -76,7 +76,7 @@ or submit a [pull request](https://github.com/Digital-Identity-Labs/yubikey_otp/
 
 ## Copyright and License
 
-Copyright (c) 2020 Digital Identity Ltd, UK
+Copyright (c) 2021 Digital Identity Ltd, UK
 
 YubikeyOTP is MIT licensed.
 
