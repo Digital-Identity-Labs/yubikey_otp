@@ -47,9 +47,8 @@ defmodule YubikeyOTP.OTP do
 
   @spec device_id(otp :: binary()) :: {:ok, binary()} | {:error, :otp_invalid}
   def device_id(otp) do
-    with {:ok, parsed} <- parse(otp) do
-      {:ok, parsed.public_id}
-    else
+    case parse(otp) do
+      {:ok, parsed} -> {:ok, parsed.public_id}
       _ -> {:error, :otp_invalid}
     end
   end
@@ -58,9 +57,8 @@ defmodule YubikeyOTP.OTP do
   def validate(otp, opts \\ [])
 
   def validate(otp, opts) when is_otp(otp) do
-    with {:ok, _} <- parse(otp, opts) do
-      {:ok, otp}
-    else
+    case parse(otp, opts) do
+      {:ok, _} -> {:ok, otp}
       _ -> {:error, :otp_invalid}
     end
   end
