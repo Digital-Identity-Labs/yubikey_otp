@@ -70,7 +70,7 @@ defmodule YubikeyOTP.OTP do
   @doc """
   Parses an OTP into an OTP struct.
 
-  Without the encryption key, only the `public_id`, 'prefix`, `serial` and
+  Without the encryption key, only the `public_id`, `prefix`, `serial` and
   `encrypted_otp` fields are hydrated.
 
   ## Options
@@ -115,55 +115,55 @@ defmodule YubikeyOTP.OTP do
 
   Without specifying a decryption key, only the public information can be hydrated.
 
-    iex> YubikeyOTP.OTP.parse!("ccccccclulvjbbhccnndrietjjnkeclcvjgrnhcivtgd")
-    %YubikeyOTP.OTP{
-      public_id: "ccccccclulvj",
-      prefix: "cccccc",
-      serial: 715512,
-      encrypted_otp: "bbhccnndrietjjnkeclcvjgrnhcivtgd"
-    }
+      iex> YubikeyOTP.OTP.parse!("ccccccclulvjbbhccnndrietjjnkeclcvjgrnhcivtgd")
+      %YubikeyOTP.OTP{
+        public_id: "ccccccclulvj",
+        prefix: "cccccc",
+        serial: 715512,
+        encrypted_otp: "bbhccnndrietjjnkeclcvjgrnhcivtgd"
+      }
 
   Specifying a decryption key, but skipping the checksum verification will
   hydrate the data even with a "bad" decryption.
 
-    iex> YubikeyOTP.OTP.parse!("ccccccclulvjbbhccnndrietjjnkeclcvjgrnhcivtgd", key: "1111111111111111", skip_checksum: true)
-    %YubikeyOTP.OTP{
-      public_id: "ccccccclulvj",
-      prefix: "cccccc",
-      serial: 715512,
-      encrypted_otp: "bbhccnndrietjjnkeclcvjgrnhcivtgd",
-      private_id: <<68, 48, 254, 248, 123, 61>>,
-      use_counter: 49442,
-      timestamp: 4703963,
-      session_counter: 150,
-      random: "Xn",
-      checksum: <<1, 15>>
-    }
+      iex> YubikeyOTP.OTP.parse!("ccccccclulvjbbhccnndrietjjnkeclcvjgrnhcivtgd", key: "1111111111111111", skip_checksum: true)
+      %YubikeyOTP.OTP{
+        public_id: "ccccccclulvj",
+        prefix: "cccccc",
+        serial: 715512,
+        encrypted_otp: "bbhccnndrietjjnkeclcvjgrnhcivtgd",
+        private_id: <<68, 48, 254, 248, 123, 61>>,
+        use_counter: 49442,
+        timestamp: 4703963,
+        session_counter: 150,
+        random: "Xn",
+        checksum: <<1, 15>>
+      }
 
-    Decrypting the token successfully will hydrate all fields.
+  Decrypting the token successfully will hydrate all fields.
 
-    iex> YubikeyOTP.OTP.parse!("ccccccclulvjhnblleegivrcjlvvtvujejbclrdjdgvk", key: "1111111111111111")
-    %YubikeyOTP.OTP{
-      public_id: "ccccccclulvj",
-      prefix: "cccccc",
-      serial: 715512,
-      encrypted_otp: "hnblleegivrcjlvvtvujejbclrdjdgvk",
-      private_id: "111111",
-      use_counter: 0,
-      timestamp: 8002816,
-      session_counter: 0,
-      random: <<64, 22>>,
-      checksum: <<44, 51>>
-    }
+      iex> YubikeyOTP.OTP.parse!("ccccccclulvjhnblleegivrcjlvvtvujejbclrdjdgvk", key: "1111111111111111")
+      %YubikeyOTP.OTP{
+        public_id: "ccccccclulvj",
+        prefix: "cccccc",
+        serial: 715512,
+        encrypted_otp: "hnblleegivrcjlvvtvujejbclrdjdgvk",
+        private_id: "111111",
+        use_counter: 0,
+        timestamp: 8002816,
+        session_counter: 0,
+        random: <<64, 22>>,
+        checksum: <<44, 51>>
+      }
 
-    Errors will be thrown when the checksum is invalid, an invalid key is
-    provided, or an invalid token is provided.
+  Errors will be thrown when the checksum is invalid, an invalid key is
+  provided, or an invalid token is provided.
 
-    iex> YubikeyOTP.OTP.parse!("ccccccclulvjbbhccnndrietjjnkeclcvjgrnhcivtgd", key: "1111111111111111")
-    ** (YubikeyOTP.OTP.InvalidChecksumError) OTP checksum is invalid
+      iex> YubikeyOTP.OTP.parse!("ccccccclulvjbbhccnndrietjjnkeclcvjgrnhcivtgd", key: "1111111111111111")
+      ** (YubikeyOTP.OTP.InvalidChecksumError) OTP checksum is invalid
 
-    iex> YubikeyOTP.OTP.parse!("nope")
-    ** (YubikeyOTP.OTP.ParseError) OTP parsing failed
+      iex> YubikeyOTP.OTP.parse!("nope")
+      ** (YubikeyOTP.OTP.ParseError) OTP parsing failed
   """
   @spec parse!(otp :: binary(), opts :: keyword()) :: YubikeyOTP.OTP.t()
   def parse!(otp, opts \\ [])
