@@ -67,11 +67,11 @@ defmodule YubikeyOTP.CRC do
 
   ## Examples
 
-    iex> YubikeyOTP.CRC.verify_crc16("")
-    false
+      iex> YubikeyOTP.CRC.verify_crc16("")
+      false
 
-    iex> YubikeyOTP.CRC.verify_crc16("1234567890" <> <<0x13, 0x4b>>)
-    true
+      iex> YubikeyOTP.CRC.verify_crc16("1234567890" <> <<0x13, 0x4b>>)
+      true
   """
   @spec verify_crc16(binary, integer, integer) :: boolean
   def verify_crc16(string, crc \\ 0xffff, residual \\ 0xf0b8) when is_binary(string) do
