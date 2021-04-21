@@ -7,7 +7,7 @@ defmodule ServiceTest do
   describe "new/1" do
 
     test "returns a service struct" do
-      assert {:ok, %Service{api_id: id, urls: urls}} = Service.new
+      assert {:ok, %Service{api_id: _id, urls: _urls}} = Service.new
     end
 
     test "can set API key" do

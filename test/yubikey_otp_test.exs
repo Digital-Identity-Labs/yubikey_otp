@@ -4,7 +4,7 @@ defmodule YubikeyOTPTest do
 
   @api_id 1
 
-  alias YubikeyOTP.Service
+  #alias YubikeyOTP.Service
 
   setup do
     bad_otp =
