@@ -21,7 +21,7 @@ dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:yubikey_otp, "~> 0.2.0"}
+    {:yubikey_otp, "~> 0.2.3"}
   ]
 end
 ```

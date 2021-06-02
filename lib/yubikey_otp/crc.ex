@@ -58,7 +58,7 @@ defmodule YubikeyOTP.CRC do
       |> :binary.bin_to_list
       |> Enum.reduce(crc,
           fn c, acc ->
-            ((acc >>> 8) ^^^ Enum.at(@lookup_table, (acc ^^^ c) &&& 0xff)) &&& 0xffff
+            (bxor((acc >>> 8), Enum.at(@lookup_table, bxor(acc, c) &&& 0xff))) &&& 0xffff
           end)
   end
 

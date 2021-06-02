@@ -3,7 +3,7 @@ defmodule YubikeyOTP.Response do
 
   alias __MODULE__
 
-  @enforce_keys [:otp, :status, :type]
+  @enforce_keys [:otp, :status]
 
   defstruct [
     :url,
