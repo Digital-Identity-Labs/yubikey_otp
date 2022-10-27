@@ -41,7 +41,7 @@ defmodule YubikeyOTP.MixProject do
       {:tesla, ">= 1.3.0"},
       {:hackney, ">= 1.15.2"},
       {:certifi, "~> 2.5.1"},
-      {:puid, "~> 1.1"},
+      {:puid, "~> 2.0"},
       {:apex, "~> 1.2", only: [:dev, :test], runtime: false},
       {:credo, "~> 1.5.0", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.13.0", only: :test},
