@@ -73,6 +73,7 @@ or submit a [pull request](https://github.com/Digital-Identity-Labs/yubikey_otp/
 ## Contributors
 
 * [Thom Dixon](https://github.com/thomdixon)
+* [Andrew Allen](https://github.com/allenan)
 
 ## Copyright and License
 
