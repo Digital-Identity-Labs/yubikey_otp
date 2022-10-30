@@ -21,7 +21,7 @@ dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:yubikey_otp, "~> 0.2.3"}
+    {:yubikey_otp, "~> 0.2.4"}
   ]
 end
 ```
@@ -77,7 +77,7 @@ or submit a [pull request](https://github.com/Digital-Identity-Labs/yubikey_otp/
 
 ## Copyright and License
 
-Copyright (c) 2021 Digital Identity Ltd, UK
+Copyright (c) 2022 Digital Identity Ltd, UK
 
 YubikeyOTP is MIT licensed.
 
